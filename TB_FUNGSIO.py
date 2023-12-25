@@ -2,13 +2,14 @@ import tkinter as tk
 
 # Pure function untuk menghitung total pembayaran
 def calculate_total(items):
-    return sum(item['price'] * item['quantity'] for item in items)
+    return sum(item[1] * item[2] for item in items)
 
 # Closure untuk menyimpan riwayat transaksi
 def transaction_history():
     history = []
 
     def add_to_history(items, total):
+        nonlocal history
         history.append({'items': items, 'total': total})
         print("Riwayat Transaksi:")
         for idx, transaction in enumerate(history, start=1):
@@ -32,9 +33,9 @@ def apply_discount(discount):
 # List comprehension untuk menghasilkan data item
 def generate_items():
     items = [
-        {'name': 'Gula', 'price': 10000, 'quantity': 2},
-        {'name': 'Telur', 'price': 20000, 'quantity': 1},
-        {'name': 'Minyak', 'price': 15000, 'quantity': 3}
+        ('Gula', 10000, 2),
+        ('Telur', 20000, 1),
+        ('Minyak', 25000, 2)
     ]
     return items
 
@@ -50,11 +51,7 @@ def create_gui():
         total_label.config(text=f"Total Pembayaran: Rp {total:,}")
 
     def add_to_cart():
-        item = {
-            'name': item_name.get(),
-            'price': int(item_price.get().replace('.', '')),
-            'quantity': int(item_quantity.get())
-        }
+        item = tuple(map(lambda x: x.get(), (item_name, item_price, item_quantity)))
         cart.append(item)
         item_name.delete(0, tk.END)
         item_price.delete(0, tk.END)
